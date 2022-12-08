@@ -72,7 +72,7 @@ export default class ApiHelper{
             return responseJson.result;
             })
 
-        const result = res.map((link: any) => {
+        const result = res.map((link) => {
             return {"id": link.id,
             "location": link.location,
             "tag": link.tag,

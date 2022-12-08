@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ScrollView, Linking } from 'react-native';
 import {useState, useEffect, createRef, useContext} from 'react';
+import CheckBox from 'expo-checkbox';
 import * as Clipboard from 'expo-clipboard';
 import ApiHelper from '../utils/api/ApiHelper';
 import Loader from '../Screen/Components/Loader';
@@ -9,6 +10,8 @@ const LinksScreen = ({navigation}) => {
     const [pageData, setPageData] = useState(null);
     const apiHelper = new ApiHelper();
     const [loading, setLoading] = useState(false);
+    const [activeLink, setActiveLink] = useState(false);
+    // const [notActiveLink, setNotActiveLink] = useState(false);
     const handleMapMode = (location, tag, time) => {
       if (location === null){
         alert('There is no location for this link!');
@@ -20,18 +23,23 @@ const LinksScreen = ({navigation}) => {
     };
     useEffect(()=>{
       if (pageData===null){
-        console.log("SETLOGIN true")
-      setLoading(true)
+      updateData()
+      }
+    })
+    const updateData = () => {
       apiHelper.getLinks().then((res) => {
         parseData(res)        
      }).catch((error) => (console.log("Error in fetching data: "+error), alert('Error in fetching data: '+error)))
-    .finally(console.log("Finish to fetch links"), setLoading(false))}
-    // setLoading(false)
-
-    })
+    .finally(console.log("Finish to fetch links"), setLoading(false))
+    }
+    const toggle = () => {
+      console.log("entered togel")
+      setActiveLink(!activeLink)
+      updateData()
+    }
     const parseData = (data) => {
       console.log("Parse Data!")
-      setPageData((data.map(x => 
+      setPageData((data.map(x => {if (x.active === activeLink){ return (
         <View style={styles.linkContainer}>
         <Text style={styles.appText}>Tag: {x.tag}</Text>
         <TouchableOpacity>
@@ -41,7 +49,7 @@ const LinksScreen = ({navigation}) => {
         <TouchableOpacity hoverStyle={styles.hoverStyle} onPress={() => handleMapMode(x.location, x.tag, x.last_modification_time)}>
         <Text style={styles.appText} hoverStyle={styles.hoverStyle}>Location: {JSON.stringify(x.location)} </Text>
          </TouchableOpacity>
-        </View>)
+        </View>)}})
         ))
       
     }
@@ -51,6 +59,15 @@ const LinksScreen = ({navigation}) => {
       <View >
           <Loader loading={loading} />
         <View>
+        <View style={styles.checkBox}>
+        <CheckBox  style={styles.box}value={activeLink} onValueChange={toggle}/>
+        <Text style={{'color':'white'}}>
+        Links with location  
+        </Text>
+        
+        
+        </View>
+        
           <ScrollView style={styles.linkDataContainer} >{pageData}</ScrollView>
           <KeyboardAvoidingView enabled>
           <TouchableOpacity style={styles.appButtonContainer} text= "sdf" onPress={() =>(navigation.push("Add Links"))} activeOpacity={0.5}>
@@ -64,7 +81,7 @@ const LinksScreen = ({navigation}) => {
           <TouchableOpacity style={styles.appButtonContainer} onPress={() =>(navigation.replace("Links"))} activeOpacity={0.5}>
           <Text style={styles.appButtonText} >Refresh</Text>
           </TouchableOpacity>
-          
+
           </KeyboardAvoidingView>
           
         </View>
@@ -78,13 +95,31 @@ const styles = StyleSheet.create({
       justifyContent: "center",
       padding: 16
     },
+    checkBox: {
+      alignItems:'flex-start',
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      elevation: 8,
+      backgroundColor: "black",
+      color: "white",
+      borderRadius: 0,
+      paddingVertical: 0,
+      paddingHorizontal: 10,
+      margin: 1
+    },
+    box: {
+      marginRight: 15,
+      margin: 1
+    },
     appButtonContainer: {
         elevation: 8,
+        color: "white",
         backgroundColor: "black",
         borderRadius: 10,
-        paddingVertical: 10,
-        paddingHorizontal: 12,
-        margin: 10
+        // paddingVertical: 10,
+        // paddingHorizontal: 12,
+        margin: 10,
+        height:"10%"
       },
       appButtonText: {
         fontSize: 18,
@@ -96,7 +131,7 @@ const styles = StyleSheet.create({
       appText:{
         color: 'white',
         borderRadius: 1,
-        paddingVertical: 10,
+        paddingVertical: 4,
         paddingHorizontal: 12,
         margin: 1
       },
@@ -110,8 +145,8 @@ const styles = StyleSheet.create({
         backgroundColor: "black",
         color: "white",
         borderRadius: 10,
-        paddingVertical: 10,
-        paddingHorizontal: 12,
+        // paddingVertical: 10,
+        // paddingHorizontal: 12,
         margin: 5
       }
       ,
@@ -123,7 +158,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 12,
         margin: 10,
-        height: 300
+        height: "65%"
       }
   });
   export default LinksScreen;
