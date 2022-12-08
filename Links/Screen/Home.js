@@ -1,8 +1,6 @@
-import AppContext from '../components/AppContext';
-import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ScrollView, Linking } from 'react-native';
 import {useState, useEffect, createRef, useContext} from 'react';
 import * as Clipboard from 'expo-clipboard';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ApiHelper from '../utils/api/ApiHelper';
 import Loader from '../Screen/Components/Loader';
 
@@ -16,9 +14,9 @@ const LinksScreen = ({navigation}) => {
         alert('There is no location for this link!');
       return;
       }
-      // console.log("Location: "+parseFloat(location.lat.toFixed(15)) + " " + location.lan.toFixed(15))
-
-      navigation.push("Maps Screen", {lat:location.lat, lan:location.lan, tag:tag, time:time})
+      // navigation.push("Maps Screen", {lat:location.lat, lan:location.lan, tag:tag, time:time})
+      let url = 'https://www.google.com/maps/search/?api=1&query='+location.lat+'%2C'+location.lan
+      Linking.openURL(url)
     };
     useEffect(()=>{
       if (pageData===null){
@@ -58,10 +56,17 @@ const LinksScreen = ({navigation}) => {
           <TouchableOpacity style={styles.appButtonContainer} text= "sdf" onPress={() =>(navigation.push("Add Links"))} activeOpacity={0.5}>
           <Text style={styles.appButtonText}>Add Links</Text>
           </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.appButtonContainer} onPress={() =>(navigation.push("Usage"))} activeOpacity={0.5}>
+          <Text style={styles.appButtonText} >Usage</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity style={styles.appButtonContainer} onPress={() =>(navigation.replace("Links"))} activeOpacity={0.5}>
           <Text style={styles.appButtonText} >Refresh</Text>
           </TouchableOpacity>
+          
           </KeyboardAvoidingView>
+          
         </View>
 
       </View>

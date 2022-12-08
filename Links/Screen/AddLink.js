@@ -1,8 +1,8 @@
-import AppContext from './components/AppContext';
+import AppContext from '../components/AppContext';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import {useState, createRef, useContext} from 'react';
 import * as Clipboard from 'expo-clipboard';
-import ApiHelper from './utils/api/ApiHelper';
+import ApiHelper from '../utils/api/ApiHelper';
 
 const AddLinks = ({navigation}) => {
     const userSettings = useContext(AppContext);

@@ -3,11 +3,11 @@ import {useState}from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './Screen/LoginScreen'
-import MapsScreen from './Maps'
+import MapsScreen from './Screen/Maps'
 import LinksScreen from './Screen/Home';
 import AppContext from './components/AppContext';
-import AddLinks from './AddLink';
-
+import AddLinks from './Screen/AddLink';
+import Usage from './Screen/Usage'
 
 
 
@@ -38,6 +38,7 @@ function App() {
         <Stack.Screen name="Links" component={LinksScreen} />
         <Stack.Screen name="Add Links" component={AddLinks} />
         <Stack.Screen name="Maps Screen" component={MapsScreen} />
+        <Stack.Screen name="Usage" component={Usage} />
       </Stack.Navigator>
     </AppContext.Provider>
     </NavigationContainer>

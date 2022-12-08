@@ -15,10 +15,10 @@ import AppContext from '../components/AppContext';
 import ApiHelper from '../utils/api/ApiHelper'
 
 const LoginScreen = ({navigation}) => {
-  const [userEmail, setUserEmail] = useState('');
-  const [userPassword, setUserPassword] = useState('');
+  const [userEmail, setUserEmail] = useState(null);
+  const [userPassword, setUserPassword] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [errortext, setErrortext] = useState('');
+  const [errortext, setErrortext] = useState(null);
   const userSettings = useContext(AppContext);
   const apiHelper = new ApiHelper();
   
@@ -57,9 +57,11 @@ const LoginScreen = ({navigation}) => {
         userSettings.setEmail('');
         userSettings.setPassword('');
         userSettings.setLogin(false);
-        setLoading(false)
+        // setLoading(false)
         setErrortext('Please check your email id or password');
           console.log('Please check your email id or password');
+      }).finally(() => {
+        setLoading(false)
       });
   };
 

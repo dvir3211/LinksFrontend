@@ -8,8 +8,8 @@ const ADD_LINK = "/links/add";
 const GET_LINKS = "/links";
 const GET_LOCATION = "/get_location"
 
-const SERVER = "https://67dc-147-235-204-70.ngrok.io";
-// const SERVER = "http://localhost:3000";
+// const SERVER = "https://67dc-147-235-204-70.ngrok.io";
+const SERVER = "https://web.post-il.net";
 
 
 
@@ -20,9 +20,6 @@ export default class ApiHelper{
     }
        
     async addLink(tag, url){
-            console.log("Entered AddLink: " + tag + " " +url)
-
-
         const res = await fetch(SERVER+ADD_LINK+'?'+'password='+this.userSettings.password+'&email='+this.userSettings.email, {method: 'POST', 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({"tag": tag, "url": url, "content": ""})}).then((response) => {
