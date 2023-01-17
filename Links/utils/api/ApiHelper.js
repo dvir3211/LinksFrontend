@@ -6,10 +6,11 @@ import {useState, createRef, useContext} from 'react';
 const LOGIN_URL = "/users/login";
 const ADD_LINK = "/links/add";
 const GET_LINKS = "/links";
+const GET_USERS = "/users";
 const GET_LOCATION = "/get_location"
 
-// const SERVER = "https://67dc-147-235-204-70.ngrok.io";
-const SERVER = "https://web.post-il.net";
+const SERVER = "http://localhost:3000";
+// const SERVER = "https://web.post-il.net";
 
 
 
@@ -57,6 +58,37 @@ export default class ApiHelper{
               })
               return res
         }
+    async getUsers(){
+        // call fetchData of Account
+        console.log("Entered Get Links in apiHelper:  " + this.userSettings)
+    
+        const res = await fetch(SERVER+GET_USERS+'?'+'password='+this.userSettings.password+'&username='+this.userSettings.email,
+         {method: 'GET',}).then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Something went wrong');
+            })
+            .then((responseJson) => {
+            return responseJson.result;
+            })
+
+        const result = res.map((user) => {
+            return {"id": user.id,
+            "username": user.username,
+            "locations_count": user.locations_count,
+            "owner_id": user.owner_id,
+            "links_count": user.links_count,
+            "user_type": user.user_type,
+            "email": user.email,
+            "active": user.active, 
+            "locations_limit": user.locations_limit, 
+            }
+        })
+    
+        return result
+    
+    }
     async getLinks(){
         // call fetchData of Account
         console.log("Entered Get Links in apiHelper:  " + this.userSettings)

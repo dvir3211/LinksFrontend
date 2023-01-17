@@ -1,14 +1,14 @@
 import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ScrollView, Linking } from 'react-native';
 import {useState, useEffect, createRef, useContext} from 'react';
-import AppContext from '../components/AppContext';
+import AppContext from '../../components/AppContext';
 
 import CheckBox from 'expo-checkbox';
 import * as Clipboard from 'expo-clipboard';
-import ApiHelper from '../utils/api/ApiHelper';
-import Loader from '../Screen/Components/Loader';
+import ApiHelper from '../../utils/api/ApiHelper';
+import Loader from '../../Screen/Components/Loader';
 
 
-const LinksScreen = ({navigation}) => {
+const UsersScreen = ({navigation}) => {
     const userSettings = useContext(AppContext);
     const [pageData, setPageData] = useState(null);
     const apiHelper = new ApiHelper();
@@ -30,7 +30,7 @@ const LinksScreen = ({navigation}) => {
       }
     })
     const updateData = () => {
-      apiHelper.getLinks().then((res) => {
+      apiHelper.getUsers().then((res) => {
         parseData(res)        
      }).catch((error) => (console.log("Error in fetching data: "+error), alert('Error in fetching data: '+error)))
     .finally(console.log("Finish to fetch links"), setLoading(false))
@@ -41,23 +41,28 @@ const LinksScreen = ({navigation}) => {
       updateData()
     }
 
-    function isAdmin(){
-      return userSettings.userType === "ADMIN" || userSettings.userType === "SUPER_USER"
-    }
+
     
     const parseData = (data) => {
       console.log("Parse Data!")
-      setPageData((data.map(x => {if (x.active === activeLink){ return (
+      setPageData((data.map(user => {return (
         <View style={styles.linkContainer}>
-        <Text style={styles.appText}>Tag: {x.tag}</Text>
-        <TouchableOpacity>
+        <Text style={styles.appText}>username: {user.username}</Text>
+        <Text style={styles.appText}>email: {user.email}</Text>
+        <Text style={styles.appText}>user type: {user.user_type}</Text>
+        <Text style={styles.appText}>locations count: {user.locations_count}</Text>
+        <Text style={styles.appText}>locations limit: {user.locations_limit}</Text>
+        <Text style={styles.appText}>Sum open links: {user.links_count}</Text>
+        <Text style={styles.appText}>id: {user.id}</Text>
+        <Text style={styles.appText}>owner id: {user.owner_id}</Text>
+        {/* <TouchableOpacity>
         <Text style={styles.appText} onPress={() => Clipboard.setStringAsync(x.link)}>Links: {x.link} (Press to copy)</Text>
         </TouchableOpacity>
         <Text style={styles.appText}>Modification Time: {x.last_modification_time}</Text>
         <TouchableOpacity hoverStyle={styles.hoverStyle} onPress={() => handleMapMode(x.location, x.tag, x.last_modification_time)}>
         <Text style={styles.appText} hoverStyle={styles.hoverStyle}>Location: {JSON.stringify(x.location)} </Text>
-         </TouchableOpacity>
-        </View>)}})
+         </TouchableOpacity> */}
+        </View>)})
         ))
       
     }
@@ -67,34 +72,8 @@ const LinksScreen = ({navigation}) => {
       <View >
           <Loader loading={loading} />
         <View>
-        <View style={styles.checkBox}>
-        <CheckBox  style={styles.box}value={activeLink} onValueChange={toggle}/>
-        <Text style={{'color':'white'}}>
-        Links with location  
-        </Text>
-        
-        
-        </View>
         
           <ScrollView style={styles.linkDataContainer} >{pageData}</ScrollView>
-          <KeyboardAvoidingView enabled>
-          <TouchableOpacity style={styles.appButtonContainer} text= "sdf" onPress={() =>(navigation.push("Add Links"))} activeOpacity={0.5}>
-          <Text style={styles.appButtonText}>Add Links</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.appButtonContainer} onPress={() =>(navigation.push("Usage"))} activeOpacity={0.5}>
-          <Text style={styles.appButtonText} >Usage</Text>
-          </TouchableOpacity>
-
-          {isAdmin()? <TouchableOpacity style={styles.appButtonContainer} onPress={() =>(navigation.push("Admin"))} activeOpacity={0.5}>
-          <Text style={styles.appButtonText} >Admin</Text>
-          </TouchableOpacity>: <></>}
-
-          <TouchableOpacity style={styles.appButtonContainer} onPress={() =>(navigation.replace("Links"))} activeOpacity={0.5}>
-          <Text style={styles.appButtonText} >Refresh</Text>
-          </TouchableOpacity>
-
-          </KeyboardAvoidingView>
           
         </View>
 
@@ -106,22 +85,6 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: "center",
       padding: 16
-    },
-    checkBox: {
-      alignItems:'flex-start',
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-      elevation: 8,
-      backgroundColor: "black",
-      color: "white",
-      borderRadius: 0,
-      paddingVertical: 0,
-      paddingHorizontal: 10,
-      margin: 1
-    },
-    box: {
-      marginRight: 15,
-      margin: 1
     },
     appButtonContainer: {
         elevation: 8,
@@ -170,8 +133,8 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 12,
         margin: 10,
-        height: "65%"
+        height: "80%"
       }
   });
-  export default LinksScreen;
+  export default UsersScreen;
  

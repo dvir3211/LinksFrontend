@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
 } from 'react-native';
+import {setUser} from '../utils/SetUser'
 import Loader from './Components/Loader';
 import AppContext from '../components/AppContext';
 import ApiHelper from '../utils/api/ApiHelper'
@@ -42,21 +43,15 @@ const LoginScreen = ({navigation}) => {
         //Hide Loader
         setLoading(true);
         console.log(responseJson);
-        // If server response message same as Data Matched
-        if (responseJson == "AAAAAAAAAAAAA") {
-          userSettings.setEmail(userEmail);
-          userSettings.setPassword(userPassword);
-          userSettings.setLogin(true);
-          navigation.replace('Links');
-        } else {
-          setErrortext('Please check your email id or password');
-          console.log('Please check your email id or password');
-        }
+        setUser(responseJson, userSettings);
+        userSettings.setLogin(true);
+        navigation.replace('Links');
       })
       .catch((error) => {
         userSettings.setEmail('');
         userSettings.setPassword('');
         userSettings.setLogin(false);
+        console.log(error)
         // setLoading(false)
         setErrortext('Please check your email id or password');
           console.log('Please check your email id or password');

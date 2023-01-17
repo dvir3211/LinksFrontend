@@ -5,14 +5,15 @@ import * as Clipboard from 'expo-clipboard';
 import ApiHelper from '../utils/api/ApiHelper';
 
 const Usage = ({navigation}) => {
+  const userSettings = useContext(AppContext);
 
     return (
       <View >
         <Text style={styles.appButtonContainer}>
-          Used Links: Comming Soon...
+          Links with locations: {userSettings.userLimit}
         </Text> 
         <Text style={styles.appButtonContainer}>
-          Sum Links: Comming Soon...
+          Links limit: {userSettings.locationsCount}
         </Text> 
       </View>
     );
