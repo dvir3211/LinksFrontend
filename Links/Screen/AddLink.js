@@ -8,7 +8,7 @@ const AddLinks = ({navigation}) => {
     const userSettings = useContext(AppContext);
     const [url, setUrl] = useState('');
     const [tag, setTag] = useState('');    
-    const [fullUrl, setfullUrl] = useState('  ');    
+    const [fullUrl, setfullUrl] = useState('');    
 
     const apiHelper = new ApiHelper();
 

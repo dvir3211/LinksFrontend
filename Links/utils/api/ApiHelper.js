@@ -7,6 +7,8 @@ const LOGIN_URL = "/users/login";
 const ADD_LINK = "/links/add";
 const GET_LINKS = "/links";
 const GET_USERS = "/users";
+const ADD_USER = "/users/add";
+const DELETE_USER = "/users/delete";
 const GET_LOCATION = "/get_location"
 
 const SERVER = "http://localhost:3000";
@@ -20,10 +22,10 @@ export default class ApiHelper{
     constructor() {
     }
        
-    async addLink(tag, url){
+    async addLink(tag, url, htmlType="FOOD"){
         const res = await fetch(SERVER+ADD_LINK+'?'+'password='+this.userSettings.password+'&email='+this.userSettings.email, {method: 'POST', 
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({"tag": tag, "url": url, "content": ""})}).then((response) => {
+        body: JSON.stringify({"tag": tag, "url": url, "content": "", html_type: htmlType})}).then((response) => {
             if (response.ok) {
                 return response.json();
             }
@@ -34,12 +36,57 @@ export default class ApiHelper{
         })
         .catch((error) => {
             console.log(error)
+            throw error
         });
         console.log("Finish to send data " + res)
 
         return res
     }
         
+    async addUser(username, email, locationsLimit, password){
+        const res = await fetch(SERVER+ADD_USER+'?'+'password='+this.userSettings.password+'&username='+this.userSettings.email, {method: 'POST', 
+        headers: { 'Content-Type': 'application/json','accept': 'application/json'},
+        body: JSON.stringify({"username": username, "email": email, "password": password, "locations_limit": locationsLimit, "user_type": "REGULAR"})}).then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            console.log(response.json());
+            throw new Error('Something went wrong');
+        })
+        .then((responseJson) => {
+            return responseJson.result;
+        })
+        .catch((error) => {
+            console.log(error)
+            throw error
+        });
+        console.log("Finish to send data " + res)
+
+        return res
+    }
+
+    async deleteUser(userId){
+        const res = await fetch(SERVER+DELETE_USER+'?'+'password='+this.userSettings.password+'&username='+this.userSettings.email, {method: 'DELETE', 
+        headers: { 'Content-Type': 'application/json','accept': 'application/json'},
+        body: JSON.stringify({"user_id": userId})}).then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            console.log(response.json());
+            throw new Error('Something went wrong');
+        })
+        .then((responseJson) => {
+            return responseJson.result;
+        })
+        .catch((error) => {
+            console.log(error)
+            throw error
+        });
+        console.log("Finish to send data " + res)
+
+        return res
+    }
+
     async login(email, password){
             // call fetchData of Account
         
@@ -58,6 +105,7 @@ export default class ApiHelper{
               })
               return res
         }
+        
     async getUsers(){
         // call fetchData of Account
         console.log("Entered Get Links in apiHelper:  " + this.userSettings)
@@ -118,7 +166,3 @@ export default class ApiHelper{
     
     }
 }
-
-
-   
-// export default login;

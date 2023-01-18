@@ -10,6 +10,7 @@ import AppContext from './components/AppContext';
 import AddLinks from './Screen/AddLink';
 import Usage from './Screen/Usage'
 import UsersScreen from './Screen/Admin/GetUsers'
+import AddUser from './Screen/Admin/AddUser';
 
 
 const Stack = createNativeStackNavigator();
@@ -21,16 +22,19 @@ function App() {
   const [data, setData] = useState([]);
   const [userType, setuserType] = useState("");
   const [userlimit, setUserLimit] = useState(0);
+  const [userId, setUserId] = useState("");
   const [locationsCount, setLocationsCount] = useState(0);
   
   const userSettings = {
     email: email,
+    userId: userId,
     password: password,
     login: login,
     data,
     userType: userType,
     userLimit: userlimit,
     locationsCount: locationsCount,
+    setUserId,
     setUserLimit,
     setLocationsCount,
     setuserType,
@@ -51,6 +55,7 @@ function App() {
         <Stack.Screen name="Usage" component={Usage} />
         <Stack.Screen name="Admin" component={AdminScreen} />
         <Stack.Screen name="Users" component={UsersScreen} />
+        <Stack.Screen name="Add User" component={AddUser} />
       </Stack.Navigator>
     </AppContext.Provider>
     </NavigationContainer>

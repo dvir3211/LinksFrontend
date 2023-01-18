@@ -10,10 +10,10 @@ const Usage = ({navigation}) => {
     return (
       <View >
         <Text style={styles.appButtonContainer}>
-          Links with locations: {userSettings.userLimit}
+          Links with locations: {userSettings.locationsCount}
         </Text> 
         <Text style={styles.appButtonContainer}>
-          Links limit: {userSettings.locationsCount}
+          Links limit: {userSettings.userLimit}
         </Text> 
       </View>
     );

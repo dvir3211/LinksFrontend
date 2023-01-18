@@ -6,7 +6,7 @@ import CheckBox from 'expo-checkbox';
 import * as Clipboard from 'expo-clipboard';
 import ApiHelper from '../utils/api/ApiHelper';
 import Loader from '../Screen/Components/Loader';
-
+import {updateUser} from '../utils/SetUser'
 
 const LinksScreen = ({navigation}) => {
     const userSettings = useContext(AppContext);
@@ -14,6 +14,7 @@ const LinksScreen = ({navigation}) => {
     const apiHelper = new ApiHelper();
     const [loading, setLoading] = useState(false);
     const [activeLink, setActiveLink] = useState(false);
+    updateUser(userSettings, apiHelper)
     // const [notActiveLink, setNotActiveLink] = useState(false);
     const handleMapMode = (location, tag, time) => {
       if (location === null){
@@ -21,14 +22,17 @@ const LinksScreen = ({navigation}) => {
       return;
       }
       // navigation.push("Maps Screen", {lat:location.lat, lan:location.lan, tag:tag, time:time})
-      let url = 'https://www.google.com/maps/search/?api=1&query='+location.lat+'%2C'+location.lan
-      Linking.openURL(url)
+    let url = 'https://www.google.com/maps/search/?api=1&query='+location.lat+'%2C'+location.lan
+    Linking.openURL(url)
     };
-    useEffect(()=>{
-      if (pageData===null){
-      updateData()
+
+    const handleAddLink = () => {
+      if (userSettings.locationsCount >= userSettings.userLimit){
+        alert('You just passed your locations limit you cant open new links, contact your owner to get more locations');
+      return;
       }
-    })
+      navigation.push("Add Links")      
+    }
     const updateData = () => {
       apiHelper.getLinks().then((res) => {
         parseData(res)        
@@ -78,7 +82,7 @@ const LinksScreen = ({navigation}) => {
         
           <ScrollView style={styles.linkDataContainer} >{pageData}</ScrollView>
           <KeyboardAvoidingView enabled>
-          <TouchableOpacity style={styles.appButtonContainer} text= "sdf" onPress={() =>(navigation.push("Add Links"))} activeOpacity={0.5}>
+          <TouchableOpacity style={styles.appButtonContainer} text= "sdf" onPress={() =>(handleAddLink())} activeOpacity={0.5}>
           <Text style={styles.appButtonText}>Add Links</Text>
           </TouchableOpacity>
           

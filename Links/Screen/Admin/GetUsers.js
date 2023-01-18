@@ -40,28 +40,29 @@ const UsersScreen = ({navigation}) => {
       setActiveLink(!activeLink)
       updateData()
     }
+    const deleteUser = (userId) => {
+      apiHelper.deleteUser(userId).then((res) => {
+      navigation.replace("Users")       
+     }).catch((error) => (console.log("Error in fetching data: "+error), alert('Error in deleting user: '+userId)))
+    .finally(console.log("Finish to fetch links"), setLoading(false))
+    }
 
 
     
     const parseData = (data) => {
       console.log("Parse Data!")
-      setPageData((data.map(user => {return (
+      setPageData((data.map(user => {console.log(user); return (
         <View style={styles.linkContainer}>
-        <Text style={styles.appText}>username: {user.username}</Text>
-        <Text style={styles.appText}>email: {user.email}</Text>
-        <Text style={styles.appText}>user type: {user.user_type}</Text>
-        <Text style={styles.appText}>locations count: {user.locations_count}</Text>
-        <Text style={styles.appText}>locations limit: {user.locations_limit}</Text>
+        <Text style={styles.appText}>Username: {user.username}</Text>
+        <Text style={styles.appText}>Email: {user.email}</Text>
+        <Text style={styles.appText}>User type: {user.user_type}</Text>
+        <Text style={styles.appText}>Locations count: {user.locations_count}</Text>
+        <Text style={styles.appText}>Locations limit: {user.locations_limit}</Text>
         <Text style={styles.appText}>Sum open links: {user.links_count}</Text>
-        <Text style={styles.appText}>id: {user.id}</Text>
-        <Text style={styles.appText}>owner id: {user.owner_id}</Text>
-        {/* <TouchableOpacity>
-        <Text style={styles.appText} onPress={() => Clipboard.setStringAsync(x.link)}>Links: {x.link} (Press to copy)</Text>
-        </TouchableOpacity>
-        <Text style={styles.appText}>Modification Time: {x.last_modification_time}</Text>
-        <TouchableOpacity hoverStyle={styles.hoverStyle} onPress={() => handleMapMode(x.location, x.tag, x.last_modification_time)}>
-        <Text style={styles.appText} hoverStyle={styles.hoverStyle}>Location: {JSON.stringify(x.location)} </Text>
-         </TouchableOpacity> */}
+        <Text style={styles.appText} onPress={() => Clipboard.setStringAsync(user.id)} >id: {user.id}</Text>
+        <Text style={styles.appText}>Owner id: {user.owner_id}</Text>
+        <Text style={styles.appText}>{user.active? "<< This User is active! >>": "<< This user is not active! >>" }</Text>
+        {user.id !== userSettings.userId?<Text style={styles.appButtonText} onPress={() => deleteUser(user.id)}>Delete User</Text>:""}
         </View>)})
         ))
       

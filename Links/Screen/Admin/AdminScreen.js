@@ -25,16 +25,12 @@ const AdminScreen = ({navigation}) => {
           <Text style={styles.appButtonText}>Users</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={styles.appButtonContainer} onPress={() =>(navigation.push("Usage"))} activeOpacity={0.5}>
+          <TouchableOpacity style={styles.appButtonContainer} onPress={() =>(navigation.push("Add User"))} activeOpacity={0.5}>
           <Text style={styles.appButtonText}>Add User</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.appButtonContainer} onPress={() =>(navigation.push("Admin"))} activeOpacity={0.5}>
           <Text style={styles.appButtonText}>Update User</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.appButtonContainer} onPress={() =>(navigation.replace("Links"))} activeOpacity={0.5}>
-          <Text style={styles.appButtonText} >Refresh</Text>
           </TouchableOpacity>
 
           </KeyboardAvoidingView>
