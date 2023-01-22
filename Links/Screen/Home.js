@@ -82,6 +82,8 @@ const LinksScreen = ({navigation}) => {
         
           <ScrollView style={styles.linkDataContainer} >{pageData}</ScrollView>
           <KeyboardAvoidingView enabled>
+
+          <ScrollView>
           <TouchableOpacity style={styles.appButtonContainer} text= "sdf" onPress={() =>(handleAddLink())} activeOpacity={0.5}>
           <Text style={styles.appButtonText}>Add Links</Text>
           </TouchableOpacity>
@@ -97,7 +99,7 @@ const LinksScreen = ({navigation}) => {
           <TouchableOpacity style={styles.appButtonContainer} onPress={() =>(navigation.replace("Links"))} activeOpacity={0.5}>
           <Text style={styles.appButtonText} >Refresh</Text>
           </TouchableOpacity>
-
+          </ScrollView>
           </KeyboardAvoidingView>
           
         </View>
@@ -134,8 +136,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         // paddingVertical: 10,
         // paddingHorizontal: 12,
-        margin: 10,
-        height:"10%"
+        margin: "3%",
+        height:"15%"
       },
       appButtonText: {
         fontSize: 18,

@@ -6,6 +6,7 @@ import LoginScreen from './Screen/LoginScreen'
 import MapsScreen from './Screen/Maps'
 import LinksScreen from './Screen/Home';
 import AdminScreen from './Screen/Admin/AdminScreen';
+import UpdateLocationsLimit from './Screen/Admin/UpdateLocationsLimit'
 import AppContext from './components/AppContext';
 import AddLinks from './Screen/AddLink';
 import Usage from './Screen/Usage'
@@ -56,6 +57,7 @@ function App() {
         <Stack.Screen name="Admin" component={AdminScreen} />
         <Stack.Screen name="Users" component={UsersScreen} />
         <Stack.Screen name="Add User" component={AddUser} />
+        <Stack.Screen name="Update locations limit" component={UpdateLocationsLimit} />
       </Stack.Navigator>
     </AppContext.Provider>
     </NavigationContainer>

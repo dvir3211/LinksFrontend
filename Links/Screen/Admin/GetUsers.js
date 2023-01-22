@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ScrollView, Linking } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ScrollView, Linking, Alert } from 'react-native';
 import {useState, useEffect, createRef, useContext} from 'react';
 import AppContext from '../../components/AppContext';
+import { confirmAlert } from 'react-confirm-alert'; 
 
 import CheckBox from 'expo-checkbox';
 import * as Clipboard from 'expo-clipboard';
@@ -14,6 +15,7 @@ const UsersScreen = ({navigation}) => {
     const apiHelper = new ApiHelper();
     const [loading, setLoading] = useState(false);
     const [activeLink, setActiveLink] = useState(false);
+
     // const [notActiveLink, setNotActiveLink] = useState(false);
     const handleMapMode = (location, tag, time) => {
       if (location === null){
@@ -40,12 +42,36 @@ const UsersScreen = ({navigation}) => {
       setActiveLink(!activeLink)
       updateData()
     }
-    const deleteUser = (userId) => {
-      apiHelper.deleteUser(userId).then((res) => {
-      navigation.replace("Users")       
-     }).catch((error) => (console.log("Error in fetching data: "+error), alert('Error in deleting user: '+userId)))
-    .finally(console.log("Finish to fetch links"), setLoading(false))
+
+    const updateLocatoinsLimit = (userId) => {
+      navigation.push("Update locations limit", {"userId": userId})
+
     }
+    const deleteUser = (userId) =>
+    Alert.alert(
+      'Delete confirmation',
+      'Are you sure you want to delete this user?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => apiHelper.deleteUser(userId).then((res) => {
+            navigation.replace("Users")       
+           }).catch((error) => (console.log("Error in fetching data: "+error), alert('Error in deleting user: '+userId)))
+          .finally(console.log("Finish to fetch links"), setLoading(false)),
+          style: 'cancel',
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () =>
+          console.log("dismissed")
+      },
+  );
 
 
     
@@ -57,12 +83,20 @@ const UsersScreen = ({navigation}) => {
         <Text style={styles.appText}>Email: {user.email}</Text>
         <Text style={styles.appText}>User type: {user.user_type}</Text>
         <Text style={styles.appText}>Locations count: {user.locations_count}</Text>
-        <Text style={styles.appText}>Locations limit: {user.locations_limit}</Text>
+        <Text style={styles.appText}>Locations limit: {user.locations_limit}
+        <TouchableOpacity
+            style={styles.appButtonContainer}
+              activeOpacity={0.5}
+              onPress={() => updateLocatoinsLimit(user.id)}>
+              <Text style={styles.appButtonText}>Update locations limit</Text>
+            </TouchableOpacity>
+        </Text>      
         <Text style={styles.appText}>Sum open links: {user.links_count}</Text>
         <Text style={styles.appText} onPress={() => Clipboard.setStringAsync(user.id)} >id: {user.id}</Text>
         <Text style={styles.appText}>Owner id: {user.owner_id}</Text>
         <Text style={styles.appText}>{user.active? "<< This User is active! >>": "<< This user is not active! >>" }</Text>
         {user.id !== userSettings.userId?<Text style={styles.appButtonText} onPress={() => deleteUser(user.id)}>Delete User</Text>:""}
+        {/* {user.id !== userSettings.userId?<Text style={styles.appButtonText} onPress={() => deleteUser(user.id)}>Delete User</Text>:""} */}
         </View>)})
         ))
       

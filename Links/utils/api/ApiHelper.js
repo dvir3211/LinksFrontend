@@ -9,9 +9,11 @@ const GET_LINKS = "/links";
 const GET_USERS = "/users";
 const ADD_USER = "/users/add";
 const DELETE_USER = "/users/delete";
+const UPDATE_LOCATIONS_LIMIT = "/users/update/locations_limit";
 const GET_LOCATION = "/get_location"
 
-const SERVER = "http://localhost:3000";
+const SERVER = "http://localhost:3000"
+// const SERVER = "https://a22b-147-235-194-102.ngrok.io";
 // const SERVER = "https://web.post-il.net";
 
 
@@ -44,9 +46,11 @@ export default class ApiHelper{
     }
         
     async addUser(username, email, locationsLimit, password){
-        const res = await fetch(SERVER+ADD_USER+'?'+'password='+this.userSettings.password+'&username='+this.userSettings.email, {method: 'POST', 
+        const res = await fetch(SERVER+ADD_USER+'?'+'password='+this.userSettings.password+'&username='+this.userSettings.email,
+         {method: 'POST', 
         headers: { 'Content-Type': 'application/json','accept': 'application/json'},
-        body: JSON.stringify({"username": username, "email": email, "password": password, "locations_limit": locationsLimit, "user_type": "REGULAR"})}).then((response) => {
+        body: JSON.stringify({"username": username, "email": email, "password": password,
+         "locations_limit": locationsLimit, "user_type": "REGULAR"})}).then((response) => {
             if (response.ok) {
                 return response.json();
             }
@@ -61,6 +65,28 @@ export default class ApiHelper{
             throw error
         });
         console.log("Finish to send data " + res)
+
+        return res
+    }
+
+    async updateLocationsLimit(userId, newLocationsLimit){
+        const res = await fetch(SERVER+UPDATE_LOCATIONS_LIMIT+'?'+'password='+this.userSettings.password+'&username='+this.userSettings.email,
+         {method: 'POST', 
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({"user_id": userId, "locations_limit": newLocationsLimit})}).then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Something went wrong');
+        })
+        .then((responseJson) => {
+            return responseJson.result;
+        })
+        .catch((error) => {
+            console.log(error)
+            throw error
+        });
+        console.log("Finish to update locations limit " + res)
 
         return res
     }
